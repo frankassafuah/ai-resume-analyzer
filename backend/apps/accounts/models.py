@@ -13,7 +13,11 @@ from apps.common.models import BaseModel
 
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     email = models.EmailField(unique=True, db_index=True)
-    name = models.CharField(max_length=255, blank=True)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+    profile_image = models.ImageField(
+        upload_to="avatars/", null=True, blank=True
+    )
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -32,3 +36,9 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     def __str__(self) -> str:
         return self.email
+
+    def get_full_name(self) -> str:
+        return f"{self.first_name} {self.last_name}".strip()
+
+    def get_short_name(self) -> str:
+        return self.first_name or self.email

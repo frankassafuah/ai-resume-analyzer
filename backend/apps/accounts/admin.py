@@ -7,13 +7,17 @@ from apps.accounts.models import User
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
     ordering = ["-created_at"]
-    list_display = ["email", "name", "is_staff", "is_active", "email_verified"]
-    search_fields = ["email", "name"]
+    list_display = ["email", "first_name", "last_name", "is_staff",
+                    "is_active", "email_verified"]
+    search_fields = ["email", "first_name", "last_name"]
     readonly_fields = ["id", "created_at", "updated_at", "last_login"]
 
     fieldsets = (
         (None, {"fields": ("id", "email", "password")}),
-        ("Personal", {"fields": ("name", "email_verified")}),
+        ("Personal", {
+            "fields": ("first_name", "last_name", "profile_image",
+                       "email_verified"),
+        }),
         ("Permissions", {
             "fields": ("is_active", "is_staff", "is_superuser",
                        "groups", "user_permissions"),
@@ -23,6 +27,7 @@ class UserAdmin(DjangoUserAdmin):
     add_fieldsets = (
         (None, {
             "classes": ("wide",),
-            "fields": ("email", "name", "password1", "password2"),
+            "fields": ("email", "first_name", "last_name",
+                       "password1", "password2"),
         }),
     )
