@@ -1,0 +1,52 @@
+# ─── Python / Django ────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+staticfiles/
+media/
+*.log
+db.sqlite3
+
+# Test / lint / type caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# ─── Environment / secrets ──────────────────────────────────────────
+# Never commit real env files; the *.example templates ARE committed.
+.env
+.env.*
+*.local
+!.env.example
+!*.env.example
+
+# ─── Node / Nuxt (frontend) ─────────────────────────────────────────
+node_modules/
+.nuxt/
+.output/
+.nitro/
+.cache/
+.data/
+dist/
+.eslintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ─── OS / editor ────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
