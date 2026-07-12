@@ -17,6 +17,7 @@ requires-python = ">=3.12"
 dependencies = [
     "Django>=5.1,<5.2",
     "djangorestframework>=3.15",
+    "django-filter>=24.3,<25",
     "drf-spectacular>=0.27",
     "djangorestframework-simplejwt>=5.3",
     "django-allauth>=65.0",
@@ -45,6 +46,8 @@ dev = [
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+# Django writes these; don't lint machine-generated files.
+extend-exclude = ["**/migrations/*", ".venv"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "DJ"]

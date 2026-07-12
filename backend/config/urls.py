@@ -7,13 +7,13 @@ from apps.common.views import HealthView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("health/", HealthView.as_view(), name="health"),
-    # OpenAPI schema + docs
+    # OpenAPI schema + Swagger UI
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "api/docs/",
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger-ui",
     ),
-    # v1 API (apps register their routers here as they land)
-    path("api/v1/", include("apps.common.urls")),
+    # Versioned API. The "v1" namespace drives DRF NamespaceVersioning.
+    path("api/v1/", include(("config.api_v1", "v1"), namespace="v1")),
 ]
