@@ -65,6 +65,3 @@ shadcn-vue (shadcn-nuxt) is the only UI library; components are copied into
 ```bash
 cd frontend && npm run ui:add -- <name>   # e.g. sonner dialog input form badge
 ```
-
-## Next: M1 — Auth & users
-See [`docs/implementation-plan.md`](./docs/implementation-plan.md).
