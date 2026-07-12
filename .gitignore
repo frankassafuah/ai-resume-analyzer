@@ -44,6 +44,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# ─── Local-only notes / design docs (not committed) ─────────────────
+sessions/
+docs/
+
 # ─── OS / editor ────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db

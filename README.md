@@ -52,7 +52,7 @@ ai-resume-analyzer/
 ├── backend/    Django/DRF, Celery, config/ split settings, apps/, entrypoint.sh
 ├── frontend/   Nuxt 4 SPA + shadcn-nuxt (Tailwind v4)
 ├── docker/     Dockerfiles (backend, frontend) + postgres/init/ (pgvector)
-├── docs/       architecture, ADRs, locked contracts, implementation plan
+├── docs/       architecture, ADRs, locked contracts
 ├── scripts/    bootstrap · dev · test · lint · create-bucket
 ├── docker-compose.yml
 ├── Makefile
