@@ -167,6 +167,15 @@ AWS_STORAGE_BUCKET_NAME = env("S3_BUCKET", default="resumes")
 AWS_S3_ENDPOINT_URL = env("S3_ENDPOINT_URL", default="http://minio:9000")
 AWS_S3_REGION_NAME = env("S3_REGION", default="us-east-1")
 
+# --- Resume uploads -------------------------------------------------------
+RESUME_ALLOWED_EXTENSIONS = ["pdf", "docx"]
+RESUME_ALLOWED_CONTENT_TYPES = [
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+]
+# Max upload size in bytes (default 5 MB).
+RESUME_MAX_UPLOAD_SIZE = env.int("RESUME_MAX_UPLOAD_SIZE", default=5 * 1024 * 1024)
+
 # --- AI provider config (adapters built in M3; FakeClient default) --------
 LLM_PROVIDER = env("LLM_PROVIDER", default="fake")  # fake|openai|anthropic|gemini
 LLM_MODEL_FAST = env("LLM_MODEL_FAST", default="fake-fast")
