@@ -1,5 +1,12 @@
-"""Repositories for job descriptions and their parsed requirements.
+"""Repositories for job descriptions."""
+from django.db.models import QuerySet
 
-Subclass `apps.common.repositories.BaseRepository[Model]` per model.
-"""
-# from apps.common.repositories import BaseRepository
+from apps.common.repositories import BaseRepository
+from apps.jobs.models import JobDescription
+
+
+class JobDescriptionRepository(BaseRepository[JobDescription]):
+    model = JobDescription
+
+    def for_user(self, user) -> QuerySet[JobDescription]:
+        return self.get_queryset().filter(user=user)
