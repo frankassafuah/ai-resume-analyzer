@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   // SPA, matching amev-crm (ADR-0005).
   ssr: false,
 
+  // vue-sonner v1 injects its own styles, so no separate CSS import is needed.
   css: ['~/assets/css/tailwind.css'],
 
   app: {
