@@ -27,8 +27,8 @@ case "${1:-api}" in
   worker)
     wait_for "$DB_HOST" "$DB_PORT" "Postgres"
     wait_for "$REDIS_HOST" "$REDIS_PORT" "Redis"
-    exec celery -A config worker -l "${LOG_LEVEL:-info}" \
-      -Q default,parsing,analysis,generation
+    exec celery -A config worker -l "${LOG_LEVEL:-info}" -E \
+      -Q default,parsing,analysis,generation,notifications
     ;;
   beat)
     exec celery -A config beat -l "${LOG_LEVEL:-info}"

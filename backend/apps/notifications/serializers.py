@@ -1,5 +1,19 @@
-"""Serializers for user notifications and delivery.
+"""Serializers for notifications (read-only + mark-read)."""
+from rest_framework import serializers
 
-Keep *InputSerializer / *OutputSerializer separate
-(see apps.common.serializers).
-"""
+from apps.notifications.models import Notification
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = [
+            "id",
+            "type",
+            "title",
+            "message",
+            "data",
+            "is_read",
+            "created_at",
+        ]
+        read_only_fields = fields

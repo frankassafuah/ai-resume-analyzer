@@ -77,6 +77,17 @@ services:
     volumes:
       - ./backend:/app
 
+  # Task monitoring dashboard (queues, tasks, workers, retries) at :5555.
+  flower:
+    image: mher/flower:2.0
+    command: celery --broker=redis://redis:6379/0 flower --port=5555
+    environment:
+      FLOWER_UNAUTHENTICATED_API: "true"
+    depends_on:
+      redis: { condition: service_healthy }
+    ports:
+      - "5555:5555"
+
   web:
     build:
       context: ./frontend

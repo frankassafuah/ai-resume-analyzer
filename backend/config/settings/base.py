@@ -96,13 +96,33 @@ CACHES = {
 # --- Celery ---------------------------------------------------------------
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=REDIS_URL)
 CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default=REDIS_URL)
+
+# Reliability: ack tasks only after completion, and requeue if a worker dies
+# mid-task, so nothing is silently lost on crash/restart.
 CELERY_TASK_ACKS_LATE = True
 CELERY_TASK_REJECT_ON_WORKER_LOST = True
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1  # fair dispatch for long AI tasks
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+# Monitoring/observability: emit task-sent/started events (Flower) and keep
+# extended result metadata.
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_SEND_SENT_EVENT = True
+CELERY_WORKER_SEND_TASK_EVENTS = True
+CELERY_RESULT_EXTENDED = True
+CELERY_RESULT_EXPIRES = 60 * 60 * 24  # 1 day
+
+# Guardrails so a stuck task can't pin a worker forever.
+CELERY_TASK_TIME_LIMIT = 300         # hard kill after 5 min
+CELERY_TASK_SOFT_TIME_LIMIT = 240    # SoftTimeLimitExceeded raised at 4 min
+CELERY_TASK_DEFAULT_RETRY_DELAY = 10
+
 CELERY_TASK_DEFAULT_QUEUE = "default"
 CELERY_TASK_ROUTES = {
     "apps.resumes.tasks.*": {"queue": "parsing"},
     "apps.analysis.tasks.run_analysis": {"queue": "analysis"},
     "apps.analysis.tasks.generate_documents": {"queue": "generation"},
+    "apps.notifications.tasks.*": {"queue": "notifications"},
 }
 
 # --- DRF / OpenAPI --------------------------------------------------------
