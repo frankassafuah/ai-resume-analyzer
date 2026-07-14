@@ -38,6 +38,13 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# Real LLM SDKs — install only when using a live provider. The default
+# FakeProvider needs none of these, so they stay out of the base image.
+providers = [
+    "openai>=1.50",
+    "anthropic>=0.39",
+    "google-genai>=0.3",
+]
 dev = [
     "ruff>=0.6",
     "mypy>=1.11",

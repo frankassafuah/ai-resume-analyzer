@@ -176,10 +176,26 @@ RESUME_ALLOWED_CONTENT_TYPES = [
 # Max upload size in bytes (default 5 MB).
 RESUME_MAX_UPLOAD_SIZE = env.int("RESUME_MAX_UPLOAD_SIZE", default=5 * 1024 * 1024)
 
-# --- AI provider config (adapters built in M3; FakeClient default) --------
+# --- AI provider config ---------------------------------------------------
+# Provider is swappable at runtime; default is the offline FakeProvider so the
+# whole pipeline works with no API keys. Real providers are lazy-loaded.
 LLM_PROVIDER = env("LLM_PROVIDER", default="fake")  # fake|openai|anthropic|gemini
 LLM_MODEL_FAST = env("LLM_MODEL_FAST", default="fake-fast")
 LLM_MODEL_STRONG = env("LLM_MODEL_STRONG", default="fake-strong")
+
+LLM_TEMPERATURE = env.float("LLM_TEMPERATURE", default=0.2)
+LLM_MAX_TOKENS = env.int("LLM_MAX_TOKENS", default=2000)
+LLM_REQUEST_TIMEOUT = env.int("LLM_REQUEST_TIMEOUT", default=60)
+LLM_MAX_RETRIES = env.int("LLM_MAX_RETRIES", default=2)
+
+# Per-provider credentials (only the selected provider's are required).
+OPENAI_API_KEY = env("OPENAI_API_KEY", default="")
+OPENAI_BASE_URL = env("OPENAI_BASE_URL", default="")  # for OpenAI-compatible hosts
+ANTHROPIC_API_KEY = env("ANTHROPIC_API_KEY", default="")
+GEMINI_API_KEY = env("GEMINI_API_KEY", default="")
+
+# Optional cost accounting: USD per 1K tokens as {model: (input, output)}.
+LLM_COST_PER_1K: dict[str, tuple[float, float]] = {}
 
 # --- CORS -----------------------------------------------------------------
 CORS_ALLOWED_ORIGINS = env.list(

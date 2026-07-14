@@ -12,4 +12,6 @@ class BaseService:
     """Marker base for services; gives each service a namespaced logger."""
 
     def __init__(self) -> None:
-        self.logger = logging.getLogger(f"apps.{self.__class__.__module__}")
+        # __module__ already starts with "apps." (e.g. "apps.analysis.services"),
+        # which sits under the configured "apps" logger namespace.
+        self.logger = logging.getLogger(self.__class__.__module__)
