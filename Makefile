@@ -47,3 +47,6 @@ fmt:            ## Auto-fix backend lint
 
 bucket:         ## Create the MinIO bucket
 	./scripts/create-bucket.sh
+
+seed:           ## Seed the database with demo data (idempotent)
+	docker compose exec api python manage.py seed

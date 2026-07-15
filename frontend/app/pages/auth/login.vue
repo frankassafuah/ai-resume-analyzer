@@ -9,30 +9,22 @@ import { Label } from '@/components/ui/label'
 definePageMeta({ layout: 'auth', middleware: 'guest' })
 
 const auth = useAuthStore()
+const route = useRoute()
 
 const schema = toTypedSchema(
   z.object({
-    first_name: z.string().optional(),
-    last_name: z.string().optional(),
     email: z.string().min(1, 'Email is required').email('Enter a valid email'),
-    password: z.string().min(8, 'At least 8 characters'),
+    password: z.string().min(1, 'Password is required'),
   }),
 )
 const { handleSubmit, errors, defineField } = useForm({ validationSchema: schema })
-const [firstName, firstNameAttrs] = defineField('first_name')
-const [lastName, lastNameAttrs] = defineField('last_name')
 const [email, emailAttrs] = defineField('email')
 const [password, passwordAttrs] = defineField('password')
 
-const { run, pending } = useAsyncAction(async (values: {
-  email: string
-  password: string
-  first_name?: string
-  last_name?: string
-}) => {
-  await auth.register(values)
-  useToast().success('Account created')
-  await navigateTo('/dashboard')
+const { run, pending } = useAsyncAction(async (values: { email: string; password: string }) => {
+  await auth.login(values)
+  useToast().success('Welcome back')
+  await navigateTo((route.query.redirect as string) || '/dashboard')
 })
 
 const onSubmit = handleSubmit((values) => run(values))
@@ -40,21 +32,12 @@ const onSubmit = handleSubmit((values) => run(values))
 
 <template>
   <div>
-    <h1 class="text-2xl font-semibold tracking-tight">Create your account</h1>
-    <p class="mt-1 text-sm text-muted-foreground">Start analyzing resumes in minutes.</p>
+    <h1 class="text-2xl font-semibold tracking-tight">Sign in</h1>
+    <p class="mt-1 text-sm text-muted-foreground">
+      Welcome back. Enter your details to continue.
+    </p>
 
     <form class="mt-8 space-y-4" @submit="onSubmit">
-      <div class="grid grid-cols-2 gap-3">
-        <div class="space-y-2">
-          <Label for="first_name">First name</Label>
-          <Input id="first_name" v-model="firstName" v-bind="firstNameAttrs" placeholder="Jane" />
-        </div>
-        <div class="space-y-2">
-          <Label for="last_name">Last name</Label>
-          <Input id="last_name" v-model="lastName" v-bind="lastNameAttrs" placeholder="Doe" />
-        </div>
-      </div>
-
       <div class="space-y-2">
         <Label for="email">Email</Label>
         <Input
@@ -75,21 +58,21 @@ const onSubmit = handleSubmit((values) => run(values))
           v-model="password"
           v-bind="passwordAttrs"
           type="password"
-          placeholder="At least 8 characters"
-          autocomplete="new-password"
+          placeholder="••••••••"
+          autocomplete="current-password"
         />
         <p v-if="errors.password" class="text-xs text-destructive">{{ errors.password }}</p>
       </div>
 
       <Button type="submit" class="w-full" :disabled="pending">
-        {{ pending ? 'Creating account…' : 'Create account' }}
+        {{ pending ? 'Signing in…' : 'Sign in' }}
       </Button>
     </form>
 
     <p class="mt-6 text-center text-sm text-muted-foreground">
-      Already have an account?
-      <NuxtLink to="/login" class="font-medium text-foreground hover:underline">
-        Sign in
+      Don't have an account?
+      <NuxtLink to="/auth/register" class="font-medium text-foreground hover:underline">
+        Sign up
       </NuxtLink>
     </p>
   </div>

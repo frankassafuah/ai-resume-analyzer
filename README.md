@@ -46,6 +46,15 @@ make ping          # -> pong   (proves Celery + Redis round-trip)
 make test          # -> pytest passes in the api container
 ```
 
+## Demo data
+```bash
+make seed          # idempotent; covers every scenario
+```
+Then sign in at http://localhost:3000 with **demo@example.com** / **Demo1234!** —
+seeds 5 resumes (parsed/versioned, pdf, pending, parsing, failed), 5 jobs
+(all employment types incl. archived), 6 analyses (completed/processing/pending/
+failed), and notifications.
+
 ## Layout
 ```
 ai-resume-analyzer/

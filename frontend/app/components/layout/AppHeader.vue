@@ -19,7 +19,7 @@ onMounted(() => {
 
     <div class="ml-auto flex items-center gap-2">
       <NuxtLink
-        to="/dashboard/notifications"
+        to="/notifications"
         class="relative flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         aria-label="Notifications"
       >

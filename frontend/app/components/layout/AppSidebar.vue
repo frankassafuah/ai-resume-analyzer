@@ -16,10 +16,10 @@ interface NavItem {
 
 const nav: NavItem[] = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
-  { label: 'Resumes', to: '/dashboard/resumes', icon: FileText },
-  { label: 'Jobs', to: '/dashboard/jobs', icon: Briefcase },
-  { label: 'Analyses', to: '/dashboard/analyses', icon: Sparkles },
-  { label: 'Settings', to: '/dashboard/settings', icon: Settings },
+  { label: 'Resumes', to: '/resumes', icon: FileText },
+  { label: 'Jobs', to: '/jobs', icon: Briefcase },
+  { label: 'Analyses', to: '/analysis', icon: Sparkles },
+  { label: 'Settings', to: '/settings', icon: Settings },
 ]
 
 const route = useRoute()

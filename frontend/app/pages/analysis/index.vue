@@ -31,7 +31,7 @@ const { run: create, pending: creating } = useAsyncAction(async () => {
   toast.success('Analysis started', 'This runs in the background.')
   showForm.value = false
   await refresh()
-  await navigateTo(`/dashboard/analyses/${analysis.id}`)
+  await navigateTo(`/analysis/${analysis.id}`)
 })
 
 const selectClass =
@@ -91,7 +91,7 @@ const statusVariant: Record<string, string> = {
       <NuxtLink
         v-for="a in data.results"
         :key="a.id"
-        :to="`/dashboard/analyses/${a.id}`"
+        :to="`/analysis/${a.id}`"
         class="flex items-center justify-between px-5 py-3.5 transition-colors hover:bg-accent/40"
       >
         <div class="min-w-0">

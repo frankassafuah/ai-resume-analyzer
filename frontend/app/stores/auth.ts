@@ -107,7 +107,7 @@ export const useAuthStore = defineStore('auth', {
       this._setTokens(null, null)
       this.user = null
       if (token) authService.logout(token).catch(() => {})
-      if (opts.redirect && import.meta.client) await navigateTo('/login')
+      if (opts.redirect && import.meta.client) await navigateTo('/auth/login')
     },
   },
 })

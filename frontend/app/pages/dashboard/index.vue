@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { FileText, Briefcase, Sparkles, Target } from 'lucide-vue-next'
+import { computed } from 'vue'
 import { analysisService } from '~/services/analysis.service'
 import { jobService } from '~/services/job.service'
 import { resumeService } from '~/services/resume.service'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 definePageMeta({ layout: 'dashboard', middleware: 'auth' })
 
@@ -14,7 +16,7 @@ const { data, pending, error, refresh } = useLoader(async () => {
   const [resumes, jobs, analyses] = await Promise.all([
     resumeService.list({ page_size: 1 }),
     jobService.list({ page_size: 1 }),
-    analysisService.list({ page_size: 5 }),
+    analysisService.list({ page_size: 8 }),
   ])
   const completed = analyses.results.filter((a) => a.status === 'completed' && a.score != null)
   const avg = completed.length
@@ -29,6 +31,14 @@ const { data, pending, error, refresh } = useLoader(async () => {
   }
 })
 
+// Oldest → newest scores for the trend chart.
+const trend = computed(() =>
+  (data.value?.recent ?? [])
+    .filter((a) => a.status === 'completed' && a.score != null)
+    .map((a) => a.score as number)
+    .reverse(),
+)
+
 const statusVariant: Record<string, string> = {
   completed: 'success',
   processing: 'warning',
@@ -42,7 +52,11 @@ const statusVariant: Record<string, string> = {
     <SharedPageHeader
       :title="`Welcome back${auth.user?.first_name ? ', ' + auth.user.first_name : ''}`"
       description="Your resume analysis at a glance."
-    />
+    >
+      <template #actions>
+        <Button as-child><NuxtLink to="/analysis">New analysis</NuxtLink></Button>
+      </template>
+    </SharedPageHeader>
 
     <SharedErrorState v-if="error" :message="error.message" @retry="refresh" />
 
@@ -50,7 +64,7 @@ const statusVariant: Record<string, string> = {
       <!-- Stats -->
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <template v-if="pending">
-          <Skeleton v-for="i in 4" :key="i" class="h-[104px] rounded-xl" />
+          <Skeleton v-for="i in 4" :key="i" class="h-26 rounded-xl" />
         </template>
         <template v-else-if="data">
           <SharedStatCard label="Resumes" :value="data.resumes" :icon="FileText" />
@@ -64,8 +78,26 @@ const statusVariant: Record<string, string> = {
         </template>
       </div>
 
+      <!-- Charts + recent -->
+      <div class="mt-6 grid gap-4 lg:grid-cols-3">
+        <!-- Avg score ring -->
+        <Card class="flex flex-col items-center justify-center p-6">
+          <h3 class="mb-4 self-start text-sm font-medium text-muted-foreground">Average match</h3>
+          <ChartsScoreRing v-if="data?.avgScore != null" :value="data.avgScore" />
+          <p v-else class="py-8 text-sm text-muted-foreground">Run an analysis to see your score.</p>
+        </Card>
+
+        <!-- Trend -->
+        <Card class="flex flex-col p-6 lg:col-span-2">
+          <h3 class="mb-4 text-sm font-medium text-muted-foreground">Recent scores</h3>
+          <div class="flex flex-1 items-end">
+            <ChartsMiniBars :values="trend" :height="120" class="w-full" />
+          </div>
+        </Card>
+      </div>
+
       <!-- Recent analyses -->
-      <div class="mt-8">
+      <div class="mt-6">
         <h2 class="mb-3 text-sm font-medium text-muted-foreground">Recent analyses</h2>
         <SharedLoadingState v-if="pending" :rows="3" />
         <SharedEmptyState
@@ -78,7 +110,7 @@ const statusVariant: Record<string, string> = {
           <NuxtLink
             v-for="a in data.recent"
             :key="a.id"
-            :to="`/dashboard/analyses/${a.id}`"
+            :to="`/analysis/${a.id}`"
             class="flex items-center justify-between px-5 py-3.5 transition-colors hover:bg-accent/40"
           >
             <div class="min-w-0">
